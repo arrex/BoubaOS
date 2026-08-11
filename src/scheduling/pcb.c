@@ -7,8 +7,8 @@
 // Start PIDs at 1
 static int next_pid = 1;
 
-struct PCB* pcb_init(char *filename, char *file_contents[], int file_length) {
-    struct PCB *pcb = malloc(sizeof(struct PCB));
+struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
+    struct PCB* pcb = malloc(sizeof(struct PCB));
 
     // Error allocating memory
     if (pcb == NULL) {
@@ -33,10 +33,10 @@ struct PCB* pcb_init(char *filename, char *file_contents[], int file_length) {
     return pcb;
 }
 
-// This constructor is used whenever a duplicate PCB is found. We pass the addresses directly
-// to enable memory sharing.
-struct PCB* pcb_dup_init(struct PCB *dup) {
-    struct PCB *pcb = malloc(sizeof(struct PCB));
+// This constructor is used whenever a duplicate PCB is found. We pass the
+// addresses directly to enable memory sharing.
+struct PCB* pcb_dup_init(struct PCB* dup) {
+    struct PCB* pcb = malloc(sizeof(struct PCB));
 
     // Error allocating memory
     if (pcb == NULL) {
@@ -60,7 +60,7 @@ struct PCB* pcb_dup_init(struct PCB *dup) {
 
 // Frees all dynamically allocated memory for the PCB struct
 // See typedef in pcd.h to get a better idea of what to free
-void pcb_deinit(struct PCB *pcb) {
+void pcb_deinit(struct PCB* pcb) {
     if (pcb != NULL) {
         // Free memory entries allocated to file contents only if there
         // are no other PCBs sharing the memory

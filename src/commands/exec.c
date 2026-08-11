@@ -1,18 +1,19 @@
-#include <string.h>
-#include <stdlib.h>
-#include <sys/stat.h>
-#include <stdio.h>
-
 #include "exec.h"
-#include "../utils/badcommand.h"
-#include "../scheduling/scheduler.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
+
 #include "../core/shell.h"
 #include "../scheduling/ready_queue.h"
+#include "../scheduling/scheduler.h"
+#include "../utils/badcommand.h"
 
-int copy_files_to_backing_store(char *programs[]);
-int build_ready_queue(char *programs[]);
+int copy_files_to_backing_store(char* programs[]);
+int build_ready_queue(char* programs[]);
 
-int exec(char *programs[], char *policy) {
+int exec(char* programs[], char* policy) {
     int errCode;
 
     errCode = copy_files_to_backing_store(programs);
@@ -45,12 +46,12 @@ int exec(char *programs[], char *policy) {
 // === HELPER FUNCTIONS ===
 
 /*
-  Copies files to backing store folder. If many filenames passed in the programs array
-  are identical, only one copy is made.
+  Copies files to backing store folder. If many filenames passed in the programs
+  array are identical, only one copy is made.
 */
-int copy_files_to_backing_store(char *programs[]) {
+int copy_files_to_backing_store(char* programs[]) {
     for (int i = 0; i < MAX_NUM_PROGRAMS; i++) {
-        char *script = programs[i];
+        char* script = programs[i];
 
         // Copy scripts into backing store folder
         if (script != NULL) {
@@ -59,7 +60,8 @@ int copy_files_to_backing_store(char *programs[]) {
             char dest_path[256];
             // Get filepaths
             snprintf(source_path, sizeof(source_path), "%s", script);
-            snprintf(dest_path, sizeof(dest_path), "./backing_store/%s", script);
+            snprintf(dest_path, sizeof(dest_path), "./backing_store/%s",
+                     script);
 
             // If file already exists in backing store, then skip copying
             struct stat file_stats;
@@ -68,13 +70,13 @@ int copy_files_to_backing_store(char *programs[]) {
             }
 
             // Open source file for reading
-            FILE *source = fopen(source_path, "rb");
+            FILE* source = fopen(source_path, "rb");
             if (source == NULL) {
                 return badcommandFileDoesNotExist();
             }
 
             // Open dest file for writing
-            FILE *dest = fopen(dest_path, "wb");
+            FILE* dest = fopen(dest_path, "wb");
             if (dest == NULL) {
                 return badCommandErrorOccurred();
             }
@@ -96,45 +98,47 @@ int copy_files_to_backing_store(char *programs[]) {
 }
 
 /*
-  This helper function reads each file from the backing store and creates the appropriate amount
-  of PCBs for each program and adds them to the ready queue.
+  This helper function reads each file from the backing store and creates the
+  appropriate amount of PCBs for each program and adds them to the ready queue.
 */
-int build_ready_queue(char *programs[]) {
+int build_ready_queue(char* programs[]) {
     for (int i = 0; i < MAX_NUM_PROGRAMS; i++) {
-        char *script = programs[i];
+        char* script = programs[i];
 
         if (script != NULL) {
             // New PCB to be created
-            struct PCB *pcb;
+            struct PCB* pcb;
             // Potential PCB with same script name (for shared memory)
-            struct PCB *duplicate = find_duplicate_script(script);
+            struct PCB* duplicate = find_duplicate_script(script);
 
-            // If duplicate found, we init PCB with same memory locations for memory sharing
-            // Else we init a new PCB
+            // If duplicate found, we init PCB with same memory locations for
+            // memory sharing Else we init a new PCB
             if (duplicate != NULL) {
                 pcb = pcb_dup_init(duplicate);
             } else {
                 char path[256];
                 snprintf(path, sizeof(path), "backing_store/%s", script);
-                FILE *p = fopen(path, "rt");
+                FILE* p = fopen(path, "rt");
 
                 if (p == NULL) {
                     return badcommandErrorReadingFromBackingStore();
                 }
 
                 // Buffer file contents in array
-                char *file_contents[MAX_FILE_SIZE];
+                char* file_contents[MAX_FILE_SIZE];
                 char buffer[MAX_USER_INPUT];
                 int line_count = 0;
 
-                while (fgets(buffer, MAX_USER_INPUT, p) != NULL && line_count < MAX_FILE_SIZE) {
+                while (fgets(buffer, MAX_USER_INPUT, p) != NULL &&
+                       line_count < MAX_FILE_SIZE) {
                     file_contents[line_count] = strdup(buffer);
                     line_count++;
                 }
 
                 fclose(p);
 
-                // Init PCB struct for process... includes writing file contents to shell memory
+                // Init PCB struct for process... includes writing file contents
+                // to shell memory
                 pcb = pcb_init(script, file_contents, line_count);
             }
 

@@ -1,22 +1,22 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "../memory/shellmemory.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 struct var_table_entry {
-    char *var;
-    char *value;
+    char* var;
+    char* value;
 };
 
 // Store a global variable table
 struct var_table_entry vartable[VAR_TABLE_SIZE];
 // Shell memory will store string entries
-char *shellmemory[SHELL_MEM_SIZE];
+char* shellmemory[SHELL_MEM_SIZE];
 
 /* === Shell memory functions === */
 void mem_init() {
-    for (int i = 0; i < SHELL_MEM_SIZE; i++){
+    for (int i = 0; i < SHELL_MEM_SIZE; i++) {
         shellmemory[i] = NULL;
     }
 
@@ -43,7 +43,7 @@ int find_available_address() {
 // This function inserts a new entry into shell memory.
 // Returns index of variable if changed or inserted with success.
 // Returns -1 in case of failure.
-int mem_set_value(char *value_in) {
+int mem_set_value(char* value_in) {
     // Search for free spot in shell memory
     int address = find_available_address();
 
@@ -58,21 +58,19 @@ int mem_set_value(char *value_in) {
 // It is a duplicate version of the above method where the
 // address can be speficied (created another version for
 // better readibalitiy).
-int mem_set_value_with_address(char *value_in, int address) {
+int mem_set_value_with_address(char* value_in, int address) {
     // Freeing even if NULL is safe in C... nothing happens if NULL by def...
     free(shellmemory[address]);
     shellmemory[address] = strdup(value_in);
     return address;
 }
 
-char *mem_get_value(int address) {
-    return strdup(shellmemory[address]);
-}
+char* mem_get_value(int address) { return strdup(shellmemory[address]); }
 
 // This function either creates a new entry in the variable table
 // or updates the current variable assignment.
 // It also updates shell memory accordingly.
-void set_var_value(char *var_in, char *value_in) {
+void set_var_value(char* var_in, char* value_in) {
     // Linear search variable table for given variable name
     for (int i = 0; i < VAR_TABLE_SIZE; i++) {
         if (vartable[i].var != NULL && strcmp(vartable[i].var, var_in) == 0) {
@@ -96,7 +94,7 @@ void set_var_value(char *var_in, char *value_in) {
 }
 
 // Get value based on input key
-char *get_var_value(char *var_in) {
+char* get_var_value(char* var_in) {
     for (int i = 0; i < VAR_TABLE_SIZE; i++) {
         if (vartable[i].var != NULL && strcmp(vartable[i].var, var_in) == 0) {
             return strdup(vartable[i].value);
@@ -108,7 +106,8 @@ char *get_var_value(char *var_in) {
 }
 
 void free_memory_entry(int address) {
-    if (address >= 0 && address < SHELL_MEM_SIZE && shellmemory[address] != NULL) {
+    if (address >= 0 && address < SHELL_MEM_SIZE &&
+        shellmemory[address] != NULL) {
         free(shellmemory[address]);
         shellmemory[address] = NULL;
     }

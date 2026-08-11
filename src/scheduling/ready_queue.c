@@ -1,10 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
 #include "../scheduling/ready_queue.h"
 
-static struct PCB *ready_queue_head = NULL;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+static struct PCB* ready_queue_head = NULL;
 static int process_count = 0;
 
 void ready_queue_init() {
@@ -12,7 +12,7 @@ void ready_queue_init() {
     process_count = 0;
 }
 
-int append_process(struct PCB *pcb) {
+int append_process(struct PCB* pcb) {
     process_count++;
 
     // If queue empty, make head
@@ -22,7 +22,7 @@ int append_process(struct PCB *pcb) {
     }
 
     // Add to end of queue if not empty
-    struct PCB *curr = ready_queue_head;
+    struct PCB* curr = ready_queue_head;
 
     while (curr->next != NULL) {
         curr = curr->next;
@@ -32,7 +32,7 @@ int append_process(struct PCB *pcb) {
     return pcb->pid;
 }
 
-int appendleft_process(struct PCB *pcb) {
+int appendleft_process(struct PCB* pcb) {
     process_count++;
 
     // If queue empty, make head
@@ -55,7 +55,7 @@ struct PCB* pop_process() {
     }
 
     // Get PCB at head of queue
-    struct PCB *popped = ready_queue_head;
+    struct PCB* popped = ready_queue_head;
     // Set new head of queue
     ready_queue_head = popped->next;
     // Clear next ptr of popped PCB
@@ -63,15 +63,12 @@ struct PCB* pop_process() {
 
     process_count--;
     return popped;
-
 }
 
-int get_process_count() {
-    return process_count;
-}
+int get_process_count() { return process_count; }
 
 void sort_ready_queue() {
-    struct PCB *queue[MAX_NUM_PROGRAMS];
+    struct PCB* queue[MAX_NUM_PROGRAMS];
 
     for (int i = 0; i < MAX_NUM_PROGRAMS; i++) {
         queue[i] = pop_process();
@@ -80,8 +77,9 @@ void sort_ready_queue() {
     // Bubble sort PCBs by file length
     for (int i = 0; i < MAX_NUM_PROGRAMS; i++) {
         for (int j = i; j < MAX_NUM_PROGRAMS; j++) {
-            if (queue[i] != NULL && queue[j] != NULL && queue[i]->job_score > queue[j]->job_score) {
-                struct PCB *tmp = queue[i];
+            if (queue[i] != NULL && queue[j] != NULL &&
+                queue[i]->job_score > queue[j]->job_score) {
+                struct PCB* tmp = queue[i];
                 queue[i] = queue[j];
                 queue[j] = tmp;
             }
@@ -97,7 +95,7 @@ void sort_ready_queue() {
 }
 
 void age_ready_queue() {
-    struct PCB *curr = ready_queue_head;
+    struct PCB* curr = ready_queue_head;
 
     while (curr != NULL) {
         // Cap minimum job score at 0
@@ -120,8 +118,8 @@ int peek_ready_queue() {
 
 // Given a string representing a script's name, return a PCB
 // object if the script is already loaded in memory, NULL otherwise.
-struct PCB* find_duplicate_script(char *script) {
-    struct PCB *curr = ready_queue_head;
+struct PCB* find_duplicate_script(char* script) {
+    struct PCB* curr = ready_queue_head;
 
     // Scan ready queue
     while (curr != NULL) {

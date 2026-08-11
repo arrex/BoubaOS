@@ -2,13 +2,13 @@
 
 #include "commands.h"
 
-int echo(char *var) {
+int echo(char* var) {
     if (var[0] == '$') {
         // Get rid of dollar sign
         var++;
         // Fetch variable value from memory
         return print(var);
-    } else{
+    } else {
         printf("%s\n", var);
     }
 

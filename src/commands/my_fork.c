@@ -1,10 +1,10 @@
-#include <unistd.h>
-#include <sys/stat.h>
 #include <stdlib.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "../utils/badcommand.h"
 
-int my_fork(char **args, int args_size) {
+int my_fork(char** args, int args_size) {
     // Returns 0 in child, positive value in parent
     pid_t pid = fork();
 
@@ -15,7 +15,7 @@ int my_fork(char **args, int args_size) {
 
     if (pid == 0) {
         // Child
-        char *fork_args[args_size + 1];
+        char* fork_args[args_size + 1];
 
         for (int i = 0; i < args_size; i++) {
             fork_args[i] = args[i];

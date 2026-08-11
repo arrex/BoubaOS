@@ -1,10 +1,11 @@
+#include "../core/interpreter.h"
+
 #include <string.h>
 
-#include "../core/interpreter.h"
-#include "../core/shell.h"
-#include "../utils/badcommand.h"
 #include "../commands/commands.h"
+#include "../core/shell.h"
 #include "../scheduling/ready_queue.h"
+#include "../utils/badcommand.h"
 
 // Interpret commands and their arguments
 int interpreter(char* command_args[], int args_size) {
@@ -23,13 +24,13 @@ int interpreter(char* command_args[], int args_size) {
         command_args[i][strcspn(command_args[i], "\r\n")] = 0;
     }
 
-    if (strcmp(command_args[0], "help") == 0){
-        //help
+    if (strcmp(command_args[0], "help") == 0) {
+        // help
         if (args_size != 1) return badcommand();
         return help();
 
     } else if (strcmp(command_args[0], "quit") == 0) {
-        //quit
+        // quit
         if (args_size != 1) return badcommand();
         return quit();
 
@@ -43,7 +44,7 @@ int interpreter(char* command_args[], int args_size) {
             return badcommandTooManyTokens();
         }
 
-        char *variable_name = command_args[1];
+        char* variable_name = command_args[1];
         char value_tokens[MAX_USER_INPUT] = "";
 
         for (int i = 2; i < args_size; i++) {
@@ -76,7 +77,6 @@ int interpreter(char* command_args[], int args_size) {
 
         return echo(command_args[1]);
     } else if (strcmp(command_args[0], "my_ls") == 0) {
-
         if (args_size > 1) {
             return badcommandTooManyTokens();
         }
@@ -84,7 +84,6 @@ int interpreter(char* command_args[], int args_size) {
         return my_ls();
 
     } else if (strcmp(command_args[0], "my_mkdir") == 0) {
-
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -96,7 +95,6 @@ int interpreter(char* command_args[], int args_size) {
         return my_mkdir(command_args[1]);
 
     } else if (strcmp(command_args[0], "my_touch") == 0) {
-
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -108,7 +106,6 @@ int interpreter(char* command_args[], int args_size) {
         return my_touch(command_args[1]);
 
     } else if (strcmp(command_args[0], "my_cd") == 0) {
-
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -119,8 +116,7 @@ int interpreter(char* command_args[], int args_size) {
 
         return my_cd(command_args[1]);
 
-    }  else if (strcmp(command_args[0], "my_fork") == 0) {
-
+    } else if (strcmp(command_args[0], "my_fork") == 0) {
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -133,7 +129,6 @@ int interpreter(char* command_args[], int args_size) {
         return my_fork(command_args + 1, args_size - 1);
 
     } else if (strcmp(command_args[0], "exec") == 0) {
-
         if (args_size < 3) {
             return badcommandMissingArguments();
         }
@@ -142,7 +137,7 @@ int interpreter(char* command_args[], int args_size) {
             return badcommandTooManyTokens();
         }
 
-        char *programs[MAX_NUM_PROGRAMS] = {NULL};
+        char* programs[MAX_NUM_PROGRAMS] = {NULL};
         int program_count = 0;
 
         for (int i = 1; i < args_size - 1; i++) {
@@ -151,7 +146,7 @@ int interpreter(char* command_args[], int args_size) {
         }
 
         // Last arg is policy
-        char *policy = command_args[args_size - 1];
+        char* policy = command_args[args_size - 1];
 
         return exec(programs, policy);
 

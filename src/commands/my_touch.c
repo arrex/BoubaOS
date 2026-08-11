@@ -1,14 +1,14 @@
 #include <stdio.h>
 
-#include "../utils/utils.h"
 #include "../utils/badcommand.h"
+#include "../utils/utils.h"
 
-int my_touch(char *filename) {
+int my_touch(char* filename) {
     if (is_valid_name(filename) != 1) {
         return badcommandNameNotAlphanum();
     }
 
-    FILE *fptr;
+    FILE* fptr;
     fptr = fopen(filename, "w");
 
     // Error creating file

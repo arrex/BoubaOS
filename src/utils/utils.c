@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 /*
   Checks if a string is valid. Used for checking file and directory names.
@@ -8,7 +8,7 @@
   - 0 if not alphanumeric
   - 1 if alphanumeric
 */
-int is_valid_name(char *string) {
+int is_valid_name(char* string) {
     if (string == NULL) {
         return 0;
     }

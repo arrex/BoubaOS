@@ -8,7 +8,7 @@ int scheduler_fcfs() {
     int errCode;
 
     while (get_process_count() > 0) {
-        struct PCB *pcb = pop_process();
+        struct PCB* pcb = pop_process();
 
         while (pcb->program_counter < pcb->file_length) {
             int address = pcb->addresses[pcb->program_counter];
@@ -34,7 +34,7 @@ int scheduler_rr(int time_slice) {
     int errCode;
 
     while (get_process_count() > 0) {
-        struct PCB *pcb = pop_process();
+        struct PCB* pcb = pop_process();
 
         for (int i = 0; i < time_slice; i++) {
             // Check if exhausted lines to execute
@@ -66,7 +66,7 @@ int scheduler_aging() {
 
     while (get_process_count() > 0) {
         // Get element at head of ready queue
-        struct PCB *pcb = pop_process();
+        struct PCB* pcb = pop_process();
 
         // Execute next instruction
         int address = pcb->addresses[pcb->program_counter];
@@ -81,7 +81,8 @@ int scheduler_aging() {
             age_ready_queue();
 
             // Add PCB back to queue at head position
-            // We insert at head to resolve tie-breaking and guarantee that current PCB has priority
+            // We insert at head to resolve tie-breaking and guarantee that
+            // current PCB has priority
             appendleft_process(pcb);
 
             // Sort queue after aging
