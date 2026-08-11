@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "../../include/commands/my_mkdir.h"
-#include "../../include/utils/badcommand.h"
-#include "../../include/memory/shellmemory.h"
-#include "../../include/utils/utils.h"
+#include "../commands/my_mkdir.h"
+#include "../utils/badcommand.h"
+#include "../memory/shellmemory.h"
+#include "../utils/utils.h"
 
 int my_mkdir(char *dirname) {
     // Fetch from memory if preceded by '$' sign

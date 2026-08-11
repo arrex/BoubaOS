@@ -3,11 +3,11 @@
 #include <sys/stat.h>
 #include <stdio.h>
 
-#include "../../include/commands/exec.h"
-#include "../../include/utils/badcommand.h"
-#include "../../include/scheduling/scheduler.h"
-#include "../../include/core/shell.h"
-#include "../../include/scheduling/ready_queue.h"
+#include "../commands/exec.h"
+#include "../utils/badcommand.h"
+#include "../scheduling/scheduler.h"
+#include "../core/shell.h"
+#include "../scheduling/ready_queue.h"
 
 int copy_files_to_backing_store(char *programs[]);
 int build_ready_queue(char *programs[]);

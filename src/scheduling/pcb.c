@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../include/memory/shellmemory.h"
-#include "../../include/scheduling/ready_queue.h"
+#include "../memory/shellmemory.h"
+#include "../scheduling/ready_queue.h"
 
 // Start PIDs at 1
 static int next_pid = 1;

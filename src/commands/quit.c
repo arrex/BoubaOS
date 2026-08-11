@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../../include/commands/quit.h"
-#include "../../include/memory/backing_store.h"
+#include "../commands/quit.h"
+#include "../memory/backing_store.h"
 
 int quit() {
     backing_store_deinit();

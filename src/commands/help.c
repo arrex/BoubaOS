@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "../../include/commands/help.h"
+#include "../commands/help.h"
 
 int help() {
     char help_string[] =

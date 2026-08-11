@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "../../include/commands/print.h"
-#include "../../include/memory/shellmemory.h"
-#include "../../include/utils/badcommand.h"
+#include "../commands/print.h"
+#include "../memory/shellmemory.h"
+#include "../utils/badcommand.h"
 
 int print(char *var) {
     char *memory_value = get_var_value(var);

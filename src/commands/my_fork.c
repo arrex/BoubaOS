@@ -2,8 +2,8 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-#include "../../include/commands/my_fork.h"
-#include "../../include/utils/badcommand.h"
+#include "../commands/my_fork.h"
+#include "../utils/badcommand.h"
 
 int my_fork(char **args, int args_size) {
     // Returns 0 in child, positive value in parent

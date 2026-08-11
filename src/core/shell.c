@@ -3,11 +3,11 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "../../include/core/shell.h"
-#include "../../include/core/interpreter.h"
-#include "../../include/memory/shellmemory.h"
-#include "../../include/scheduling/ready_queue.h"
-#include "../../include/memory/backing_store.h"
+#include "../core/shell.h"
+#include "../core/interpreter.h"
+#include "../memory/shellmemory.h"
+#include "../scheduling/ready_queue.h"
+#include "../memory/backing_store.h"
 
 int parseInput(char ui[]);
 
