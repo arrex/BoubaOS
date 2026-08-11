@@ -1,3 +1,6 @@
+setup:
+    git config core.hooksPath .githooks
+
 clean:
     rm -rf build
 
