@@ -6,17 +6,6 @@ BUILD_DIR="$SCRIPT_DIR/build"
 TEST_DIR="$SCRIPT_DIR/tests"
 LOG_FILE="$SCRIPT_DIR/test_results.log"
 
-# Compile
-rm -rf build
-cmake -B build -S .
-
-if [ $? -ne 0 ]; then
-    echo "CMake configuration failed"
-    exit 1
-fi
-
-cmake --build build
-
 # Create/clear log file
 echo "Test Results" > "$LOG_FILE"
 echo "=============" >> "$LOG_FILE"
