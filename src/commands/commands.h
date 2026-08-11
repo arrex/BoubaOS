@@ -1,0 +1,12 @@
+int echo(char *var);
+int exec(char *programs[], char *policy);
+int help();
+int my_cd(char *dirname);
+int my_fork(char **args, int args_size);
+int my_ls();
+int my_mkdir(char *dirname);
+int my_touch(char *filename);
+int print(char *var);
+int quit();
+int run(char *script);
+int set(char *var, char *value);

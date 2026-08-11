@@ -1,7 +1,5 @@
 #include <stdio.h>
 
-#include "../commands/help.h"
-
 int help() {
     char help_string[] =
        "COMMAND          DESCRIPTION\n"

@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../commands/quit.h"
 #include "../memory/backing_store.h"
 
 int quit() {

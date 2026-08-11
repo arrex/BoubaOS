@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 
-#include "../commands/exec.h"
+#include "exec.h"
 #include "../utils/badcommand.h"
 #include "../scheduling/scheduler.h"
 #include "../core/shell.h"

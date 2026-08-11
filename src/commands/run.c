@@ -1,5 +1,4 @@
-#include "../commands/run.h"
-#include "../commands/exec.h"
+#include "commands.h"
 #include "../scheduling/ready_queue.h"
 
 int run(char *script) {

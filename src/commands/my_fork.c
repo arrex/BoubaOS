@@ -2,7 +2,6 @@
 #include <sys/stat.h>
 #include <stdlib.h>
 
-#include "../commands/my_fork.h"
 #include "../utils/badcommand.h"
 
 int my_fork(char **args, int args_size) {

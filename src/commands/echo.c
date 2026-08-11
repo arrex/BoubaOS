@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-#include "../commands/echo.h"
-#include "../commands/print.h"
+#include "commands.h"
 
 int echo(char *var) {
     if (var[0] == '$') {

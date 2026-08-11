@@ -1,1 +1,0 @@
-int echo(char *var);
