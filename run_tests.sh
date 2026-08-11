@@ -24,8 +24,6 @@ cleanup_test_artifacts() {
     find . -type d -name "test*" -exec rm -rf {} +
     # Remove any files created during tests (assuming they start with "test")
     find . -type f -name "test*" -exec rm -f {} +
-    # Remove backing store
-    find . -type d -name "backing_store" -exec rm -rf {} +
 }
 
 # Iterate through each test directory

@@ -20,7 +20,6 @@ int badCommandErrorOccurred() {
     return 4;
 }
 
-// For run command only
 int badcommandFileDoesNotExist() {
     printf("Bad command: File not found\n");
     return 5;
@@ -49,9 +48,4 @@ int badCommandProcessTableFull() {
 int badcommandInvalidPolicy() {
     printf("Bad command: Invalid policy selected\n");
     return 10;
-}
-
-int badcommandErrorReadingFromBackingStore() {
-    printf("Bad command: Error occurred while reading from backing store\n");
-    return 11;
 }

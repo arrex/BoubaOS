@@ -6,7 +6,6 @@
 #include <unistd.h>
 
 #include "../core/interpreter.h"
-#include "../memory/backing_store.h"
 #include "../memory/shellmemory.h"
 #include "../scheduling/ready_queue.h"
 
@@ -36,8 +35,6 @@ int main(int argc, char* argv[]) {
     mem_init();
     // Init process table
     ready_queue_init();
-    // Init backing store
-    backing_store_init();
 
     while (1) {
         // Check if we are in interactive mode... omit printing prompt char if

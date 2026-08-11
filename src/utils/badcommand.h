@@ -8,4 +8,3 @@ int badcommandNameNotAlphanum(void);
 int badcommandDirDoesNotExist(void);
 int badCommandProcessTableFull(void);
 int badcommandInvalidPolicy(void);
-int badcommandErrorReadingFromBackingStore(void);

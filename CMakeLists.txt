@@ -28,7 +28,6 @@ add_executable(mysh
     src/scheduling/scheduler.c
     src/utils/badcommand.c
     src/utils/utils.c
-    src/memory/backing_store.c
     src/commands/echo.c
     src/commands/exec.c
     src/commands/help.c

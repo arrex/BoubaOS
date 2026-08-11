@@ -10,19 +10,10 @@
 #include "../scheduling/scheduler.h"
 #include "../utils/badcommand.h"
 
-int copy_files_to_backing_store(char* programs[]);
 int build_ready_queue(char* programs[]);
 
 int exec(char* programs[], char* policy) {
-    int errCode;
-
-    errCode = copy_files_to_backing_store(programs);
-
-    if (errCode != 0) {
-        return errCode;
-    }
-
-    errCode = build_ready_queue(programs);
+    int errCode = build_ready_queue(programs);
 
     if (errCode != 0) {
         return errCode;
@@ -41,60 +32,6 @@ int exec(char* programs[], char* policy) {
     } else {
         return badcommandInvalidPolicy();
     }
-}
-
-// === HELPER FUNCTIONS ===
-
-/*
-  Copies files to backing store folder. If many filenames passed in the programs
-  array are identical, only one copy is made.
-*/
-int copy_files_to_backing_store(char* programs[]) {
-    for (int i = 0; i < MAX_NUM_PROGRAMS; i++) {
-        char* script = programs[i];
-
-        // Copy scripts into backing store folder
-        if (script != NULL) {
-            // Buffers to hold source and destination filepath
-            char source_path[256];
-            char dest_path[256];
-            // Get filepaths
-            snprintf(source_path, sizeof(source_path), "%s", script);
-            snprintf(dest_path, sizeof(dest_path), "./backing_store/%s",
-                     script);
-
-            // If file already exists in backing store, then skip copying
-            struct stat file_stats;
-            if (stat(dest_path, &file_stats) == 0) {
-                continue;
-            }
-
-            // Open source file for reading
-            FILE* source = fopen(source_path, "rb");
-            if (source == NULL) {
-                return badcommandFileDoesNotExist();
-            }
-
-            // Open dest file for writing
-            FILE* dest = fopen(dest_path, "wb");
-            if (dest == NULL) {
-                return badCommandErrorOccurred();
-            }
-
-            // Copy file contents from src to dest
-            char buffer[MAX_USER_INPUT];
-            size_t bytes;
-            while ((bytes = fread(buffer, 1, sizeof(buffer), source)) > 0) {
-                fwrite(buffer, 1, bytes, dest);
-            }
-
-            // Close files
-            fclose(source);
-            fclose(dest);
-        }
-    }
-
-    return 0;
 }
 
 /*
@@ -117,11 +54,11 @@ int build_ready_queue(char* programs[]) {
                 pcb = pcb_dup_init(duplicate);
             } else {
                 char path[256];
-                snprintf(path, sizeof(path), "backing_store/%s", script);
+                snprintf(path, sizeof(path), "%s", script);
                 FILE* p = fopen(path, "rt");
 
                 if (p == NULL) {
-                    return badcommandErrorReadingFromBackingStore();
+                    return badcommandFileDoesNotExist();
                 }
 
                 // Buffer file contents in array
