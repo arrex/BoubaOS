@@ -2,6 +2,7 @@ setup:
     git config core.hooksPath .githooks
 
 clean:
+    rm *.log
     rm -rf build
 
 build:
