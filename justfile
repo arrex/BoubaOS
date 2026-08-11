@@ -12,3 +12,6 @@ run:
     just build
     just test
     ./build/mysh
+
+lint:
+    find . -name "*.c" -o -name "*.h" | xargs clang-format -i
