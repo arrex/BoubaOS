@@ -19,19 +19,27 @@ struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
     pcb->filename = strdup(filename);
     pcb->file_length = file_length;
 
-    // init page table to map file frames to memory frames
-    for (int file_frame = 0; file_frame < file_length;
-         file_frame = file_frame + FRAME_SIZE) {
-        int memory_frame = find_available_frame();
+    // init page table to map file pages to memory frames
+    int page = 0;
+    while (page * FRAME_SIZE < file_length) {
+        int frame = find_available_frame();
 
-        for (int i = 0; i < FRAME_SIZE && file_frame + i < file_length; i++) {
-            int file_line = file_frame + i;
-            int memory_address = memory_frame * FRAME_SIZE + i;
+        for (int offset = 0; offset < FRAME_SIZE; offset++) {
+            int line = page * FRAME_SIZE + offset;
+            int address = frame * FRAME_SIZE + offset;
 
-            mem_set_value(file_contents[file_line], memory_address);
+            if (line < file_length) {
+                mem_set_value(file_contents[line], address);
+            }
         }
 
-        pcb->page_table[file_frame / FRAME_SIZE] = memory_frame;
+        pcb->page_table[page] = frame;
+        page++;
+    }
+
+    // set rest of page table to sentinels
+    for (page = page; page < MAX_PAGE_TABLE_SIZE; page++) {
+        pcb->page_table[page] = -1;
     }
 
     pcb->program_counter = 0;
@@ -74,13 +82,10 @@ void pcb_deinit(struct PCB* pcb) {
         // Free memory entries allocated to file contents only if there
         // are no other PCBs sharing the memory
         if (find_duplicate_script(pcb->filename) == NULL) {
-            for (int i = 0; i < MAX_PAGE_TABLE_SIZE; i++) {
-                int frame = pcb->page_table[i];
-
-                for (int offset = 0; offset < FRAME_SIZE; offset++) {
-                    int address = frame * FRAME_SIZE + offset;
-                    free_memory_entry(address);
-                }
+            for (int page = 0;
+                 page < MAX_PAGE_TABLE_SIZE && pcb->page_table[page] != -1;
+                 page++) {
+                free_memory_frame(pcb->page_table[page]);
             }
         }
 

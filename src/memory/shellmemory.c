@@ -52,9 +52,10 @@ void mem_set_value(char* value_in, int address) {
 
 char* mem_get_value(int address) { return strdup(shellmemory[address]); }
 
-void free_memory_entry(int address) {
-    if (address >= 0 && address < SHELL_MEM_SIZE &&
-        shellmemory[address] != NULL) {
+void free_memory_frame(int frame) {
+    int base = frame * FRAME_SIZE;
+    for (int offset = 0; offset < FRAME_SIZE; offset++) {
+        int address = base + offset;
         free(shellmemory[address]);
         shellmemory[address] = NULL;
     }

@@ -11,7 +11,11 @@ int scheduler_fcfs() {
         struct PCB* pcb = pop_process();
 
         while (pcb->program_counter < pcb->file_length) {
-            int address = pcb->addresses[pcb->program_counter];
+            int page = pcb->program_counter / FRAME_SIZE;
+            int frame = pcb->page_table[page];
+            int offset = pcb->program_counter % FRAME_SIZE;
+            int address = frame * FRAME_SIZE + offset;
+
             errCode = parseInput(mem_get_value(address));
             pcb->program_counter++;
         }
@@ -42,7 +46,11 @@ int scheduler_rr(int time_slice) {
                 break;
             }
 
-            int address = pcb->addresses[pcb->program_counter];
+            int page = pcb->program_counter / FRAME_SIZE;
+            int frame = pcb->page_table[page];
+            int offset = pcb->program_counter % FRAME_SIZE;
+            int address = frame * FRAME_SIZE + offset;
+
             errCode = parseInput(mem_get_value(address));
             pcb->program_counter++;
         }
@@ -69,7 +77,11 @@ int scheduler_aging() {
         struct PCB* pcb = pop_process();
 
         // Execute next instruction
-        int address = pcb->addresses[pcb->program_counter];
+        int page = pcb->program_counter / FRAME_SIZE;
+        int frame = pcb->page_table[page];
+        int offset = pcb->program_counter % FRAME_SIZE;
+        int address = frame * FRAME_SIZE + offset;
+
         errCode = parseInput(mem_get_value(address));
         pcb->program_counter++;
 

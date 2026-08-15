@@ -1,16 +1,16 @@
 #include "../core/interpreter.h"
 #include "../memory/shellmemory.h"
 
-#define MAX_PAGE_TABLE_SIZE ((MAX_FILE_SIZE / FRAME_SIZE) + 1)
+// round up
+#define MAX_PAGE_TABLE_SIZE (MAX_FILE_SIZE + FRAME_SIZE - 1) / FRAME_SIZE
 
 typedef struct PCB {
     int pid;
     char* filename;
     int file_length;
-    int addresses[MAX_FILE_SIZE];
+    int page_table[MAX_PAGE_TABLE_SIZE];
     int program_counter;
     int job_score;
-    int page_table[MAX_PAGE_TABLE_SIZE];
     struct PCB* next;
 } PCB;
 
