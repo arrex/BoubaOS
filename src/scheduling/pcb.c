@@ -19,10 +19,19 @@ struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
     pcb->filename = strdup(filename);
     pcb->file_length = file_length;
 
-    // Need logic to compute addresses
-    for (int i = 0; i < file_length; i++) {
-        int address = mem_set_value(file_contents[i]);
-        pcb->addresses[i] = address;
+    // init page table to map file frames to memory frames
+    for (int file_frame = 0; file_frame < file_length;
+         file_frame = file_frame + FRAME_SIZE) {
+        int memory_frame = find_available_frame();
+
+        for (int i = 0; i < FRAME_SIZE && file_frame + i < file_length; i++) {
+            int file_line = file_frame + i;
+            int memory_address = memory_frame * FRAME_SIZE + i;
+
+            mem_set_value(file_contents[file_line], memory_address);
+        }
+
+        pcb->page_table[file_frame / FRAME_SIZE] = memory_frame;
     }
 
     pcb->program_counter = 0;
@@ -47,8 +56,8 @@ struct PCB* pcb_dup_init(struct PCB* dup) {
     pcb->filename = strdup(dup->filename);
     pcb->file_length = dup->file_length;
 
-    for (int i = 0; i < MAX_FILE_SIZE; i++) {
-        pcb->addresses[i] = dup->addresses[i];
+    for (int i = 0; i < MAX_PAGE_TABLE_SIZE; i++) {
+        pcb->page_table[i] = dup->page_table[i];
     }
 
     pcb->program_counter = 0;
@@ -65,8 +74,13 @@ void pcb_deinit(struct PCB* pcb) {
         // Free memory entries allocated to file contents only if there
         // are no other PCBs sharing the memory
         if (find_duplicate_script(pcb->filename) == NULL) {
-            for (int i = 0; i < pcb->file_length; i++) {
-                free_memory_entry(pcb->addresses[i]);
+            for (int i = 0; i < MAX_PAGE_TABLE_SIZE; i++) {
+                int frame = pcb->page_table[i];
+
+                for (int offset = 0; offset < FRAME_SIZE; offset++) {
+                    int address = frame * FRAME_SIZE + offset;
+                    free_memory_entry(address);
+                }
             }
         }
 
