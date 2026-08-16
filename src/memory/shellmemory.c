@@ -10,17 +10,17 @@ struct var_table_entry {
 };
 
 // Store a global variable table
-struct var_table_entry vartable[VAR_TABLE_SIZE];
+struct var_table_entry vartable[VAR_STORE_SIZE];
 // Shell memory will store string entries
-char* shellmemory[SHELL_MEM_SIZE];
+char* shellmemory[FRAME_STORE_SIZE];
 
 /* === Shell memory functions === */
 void mem_init() {
-    for (int i = 0; i < SHELL_MEM_SIZE; i++) {
+    for (int i = 0; i < FRAME_STORE_SIZE; i++) {
         shellmemory[i] = NULL;
     }
 
-    for (int i = 0; i < VAR_TABLE_SIZE; i++) {
+    for (int i = 0; i < VAR_STORE_SIZE; i++) {
         vartable[i].var = NULL;
         vartable[i].value = NULL;
     }
@@ -29,7 +29,7 @@ void mem_init() {
 // This function searches for a free frame in shell memory.
 // Returns frame number if free frame is found, -1 otherwise.
 int find_available_frame() {
-    for (int frame = 0; frame < SHELL_MEM_SIZE / FRAME_SIZE; frame++) {
+    for (int frame = 0; frame < FRAME_STORE_SIZE / FRAME_SIZE; frame++) {
         int address = frame * FRAME_SIZE;
 
         if (shellmemory[address] == NULL) {
@@ -43,7 +43,7 @@ int find_available_frame() {
 
 // This function inserts a new entry into shell memory.
 void mem_set_value(char* value_in, int address) {
-    if (address < 0 || address > SHELL_MEM_SIZE) {
+    if (address < 0 || address > FRAME_STORE_SIZE) {
         return;
     }
 
@@ -66,7 +66,7 @@ void free_memory_frame(int frame) {
 // It also updates shell memory accordingly.
 void set_var_value(char* var_in, char* value_in) {
     // Linear search variable table for given variable name
-    for (int i = 0; i < VAR_TABLE_SIZE; i++) {
+    for (int i = 0; i < VAR_STORE_SIZE; i++) {
         if (vartable[i].var != NULL && strcmp(vartable[i].var, var_in) == 0) {
             free(vartable[i].value);
             vartable[i].value = strdup(value_in);
@@ -75,7 +75,7 @@ void set_var_value(char* var_in, char* value_in) {
     }
 
     // Variable does not exist, need to find a free spot
-    for (int i = 0; i < VAR_TABLE_SIZE; i++) {
+    for (int i = 0; i < VAR_STORE_SIZE; i++) {
         if (vartable[i].var == NULL) {
             vartable[i].var = strdup(var_in);
             vartable[i].value = strdup(value_in);
@@ -89,7 +89,7 @@ void set_var_value(char* var_in, char* value_in) {
 
 // Get value based on input key
 char* get_var_value(char* var_in) {
-    for (int i = 0; i < VAR_TABLE_SIZE; i++) {
+    for (int i = 0; i < VAR_STORE_SIZE; i++) {
         if (vartable[i].var != NULL && strcmp(vartable[i].var, var_in) == 0) {
             return strdup(vartable[i].value);
         }

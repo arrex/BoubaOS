@@ -41,3 +41,12 @@ add_executable(mysh
     src/commands/run.c
     src/commands/set.c
 )
+
+# Gather user-defined flags
+set(FRAME_STORE_SIZE "600" CACHE STRING "Number of frames in the frame store")
+set(VAR_STORE_SIZE "10" CACHE STRING
+  "Number of variable entries in the variable memory table")
+
+# Pass values to compilation flags
+target_compile_definitions(mysh PRIVATE
+  FRAME_STORE_SIZE=${FRAME_STORE_SIZE} VAR_STORE_SIZE=${VAR_STORE_SIZE})

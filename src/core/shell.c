@@ -17,11 +17,16 @@ int main(int argc, char* argv[]) {
     // mode
     setvbuf(stdout, NULL, _IONBF, 0);
 
-    printf("Shell version 1.3 Created September 2024\n");
-    printf("►  Type help to get list of commands\n\n");
+    int is_interactive =
+        isatty(STDIN_FILENO);  // 1 = interactive mode, 0 = batch mode
 
-    int mode_flag =
-        isatty(STDIN_FILENO);        // 1 = interactive mode, 0 = batch mode
+    if (is_interactive) {
+        printf("Welcome to BoubaOS!\n");
+        printf("Frame Store Size = %d; Variable Store Size = %d\n",
+               FRAME_STORE_SIZE, VAR_STORE_SIZE);
+        printf("►  Type help to get list of commands\n\n");
+    }
+
     char prompt = '$';               // Shell prompt
     char userInput[MAX_USER_INPUT];  // user's input stored here
     int errorCode = 0;               // zero means no error, default
@@ -31,15 +36,13 @@ int main(int argc, char* argv[]) {
         userInput[i] = '\0';
     }
 
-    // Init shell memory
     mem_init();
-    // Init process table
     ready_queue_init();
 
     while (1) {
         // Check if we are in interactive mode... omit printing prompt char if
         // we are in batch mode
-        if (mode_flag) {
+        if (is_interactive) {
             printf("%c ", prompt);
         }
 

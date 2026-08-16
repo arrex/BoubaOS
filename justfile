@@ -5,15 +5,16 @@ clean:
     rm -f *.log
     rm -rf build
 
-build:
-    mkdir -p build && cmake -B build -S . && cmake --build build
+build FRAME_STORE_SIZE="600" VAR_STORE_SIZE="10":
+    just clean
+    mkdir -p build && cmake -B build -DFRAME_STORE_SIZE={{FRAME_STORE_SIZE}} -DVAR_STORE_SIZE={{VAR_STORE_SIZE}} -S . -DCMAKE_BUILD_TYPE=Debug && cmake --build build
 
 test:
     ./run_tests.sh
 
-run:
+run FRAME_STORE_SIZE="600" VAR_STORE_SIZE="10":
     just clean
-    just build
+    just build {{FRAME_STORE_SIZE}} {{VAR_STORE_SIZE}}
     just test
     ./build/mysh
 
