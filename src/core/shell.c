@@ -1,13 +1,14 @@
-#include "../core/shell.h"
+#include "shell.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "../core/interpreter.h"
+#include "../memory/lru.h"
 #include "../memory/shellmemory.h"
 #include "../scheduling/ready_queue.h"
+#include "interpreter.h"
 
 int parseInput(char ui[]);
 
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
 
     mem_init();
     ready_queue_init();
+    lru_init();
 
     while (1) {
         // Check if we are in interactive mode... omit printing prompt char if

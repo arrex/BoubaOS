@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "../scheduling/pcb.h"
+#include "lru.h"
 
 struct var_table_entry {
     char* var;
@@ -98,6 +99,9 @@ void load_page_into_frame(struct PCB* pcb, int page, int frame) {
 
     // update pcb page table
     pcb->page_table[page] = frame;
+
+    // update LRU ordering
+    access_frame(frame);
 }
 
 void free_memory_frame(int frame) {

@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "../core/shell.h"
+#include "../memory/lru.h"
 #include "../memory/shellmemory.h"
 #include "ready_queue.h"
 
@@ -24,7 +25,7 @@ int scheduler_fcfs() {
                 if (free_frame == -1) {
                     // choose trivial frame to evict, will implement LRU
                     // eviction in the future
-                    int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+                    int victim_frame = get_lru_frame();
 
                     printf("Page fault! Victim page contents:\n\n");
                     for (int address = victim_frame * FRAME_SIZE;
@@ -53,6 +54,7 @@ int scheduler_fcfs() {
                 continue;
             }
 
+            access_frame(frame);
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
@@ -93,9 +95,7 @@ int scheduler_rr(int time_slice) {
                 int free_frame = find_available_frame();
 
                 if (free_frame == -1) {
-                    // choose trivial frame to evict, will implement LRU
-                    // eviction in the future
-                    int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+                    int victim_frame = get_lru_frame();
 
                     printf("Page fault! Victim page contents:\n\n");
                     for (int address = victim_frame * FRAME_SIZE;
@@ -125,6 +125,7 @@ int scheduler_rr(int time_slice) {
                 break;
             }
 
+            access_frame(frame);
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
@@ -163,7 +164,7 @@ int scheduler_aging() {
             if (free_frame == -1) {
                 // choose trivial frame to evict, will implement LRU eviction in
                 // the future
-                int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+                int victim_frame = get_lru_frame();
 
                 printf("Page fault! Victim page contents:\n\n");
                 for (int address = victim_frame * FRAME_SIZE;
@@ -193,6 +194,7 @@ int scheduler_aging() {
             frame = free_frame;
         }
 
+        access_frame(frame);
         int offset = pcb->program_counter % FRAME_SIZE;
         int address = frame * FRAME_SIZE + offset;
 

@@ -23,6 +23,7 @@ add_executable(mysh
     src/core/shell.c
     src/core/interpreter.c
     src/memory/shellmemory.c
+    src/memory/lru.c
     src/scheduling/pcb.c
     src/scheduling/ready_queue.c
     src/scheduling/scheduler.c
