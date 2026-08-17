@@ -1,8 +1,9 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../memory/shellmemory.h"
-#include "../scheduling/ready_queue.h"
+#include "ready_queue.h"
 
 // Start PIDs at 1
 static int next_pid = 1;
@@ -17,29 +18,24 @@ struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
 
     pcb->pid = next_pid++;
     pcb->filename = strdup(filename);
+    memcpy(pcb->file_contents, file_contents, sizeof(char*) * file_length);
     pcb->file_length = file_length;
 
-    // init page table to map file pages to memory frames
-    int page = 0;
-    while (page * FRAME_SIZE < file_length) {
-        int frame = find_available_frame();
-
-        for (int offset = 0; offset < FRAME_SIZE; offset++) {
-            int line = page * FRAME_SIZE + offset;
-            int address = frame * FRAME_SIZE + offset;
-
-            if (line < file_length) {
-                mem_set_value(file_contents[line], address);
-            }
-        }
-
-        pcb->page_table[page] = frame;
-        page++;
+    // init page table entries to sentinels
+    for (int page = 0; page < MAX_PAGE_TABLE_SIZE; page++) {
+        pcb->page_table[page] = -1;
     }
 
-    // set rest of page table to sentinels
-    for (page = page; page < MAX_PAGE_TABLE_SIZE; page++) {
-        pcb->page_table[page] = -1;
+    // code loading: load up to first 2 pages if there is capacity
+    for (int page = 0; page < 2 && page * FRAME_SIZE < file_length; page++) {
+        int frame = find_available_frame();
+
+        if (frame == -1) {
+            break;
+        }
+
+        load_page_into_frame(pcb, page, frame);
+        pcb->page_table[page] = frame;
     }
 
     pcb->program_counter = 0;
@@ -85,7 +81,6 @@ void pcb_deinit(struct PCB* pcb) {
             for (int page = 0;
                  page < MAX_PAGE_TABLE_SIZE && pcb->page_table[page] != -1;
                  page++) {
-                free_memory_frame(pcb->page_table[page]);
             }
         }
 

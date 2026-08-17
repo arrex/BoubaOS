@@ -1,6 +1,10 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "../core/shell.h"
 #include "../memory/shellmemory.h"
-#include "../scheduling/ready_queue.h"
+#include "ready_queue.h"
 
 // First-come, first-server policy
 // Execute each script in queue until completion sequentially
@@ -13,6 +17,42 @@ int scheduler_fcfs() {
         while (pcb->program_counter < pcb->file_length) {
             int page = pcb->program_counter / FRAME_SIZE;
             int frame = pcb->page_table[page];
+
+            if (frame == -1) {
+                int free_frame = find_available_frame();
+
+                if (free_frame == -1) {
+                    // choose trivial frame to evict, will implement LRU
+                    // eviction in the future
+                    int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+
+                    printf("Page fault! Victim page contents:\n\n");
+                    for (int address = victim_frame * FRAME_SIZE;
+                         address < victim_frame * FRAME_SIZE + FRAME_SIZE;
+                         address++) {
+                        char* content = mem_get_value(address);
+
+                        if (content == NULL) {
+                            char null_content[] = "NULL";
+                            content = null_content;
+                        }
+
+                        content[strcspn(content, "\n")] =
+                            '\0';  // trim newline for formatting
+                        printf("%s\n", content);
+                    }
+                    printf("\nEnd of victim page contents.\n");
+
+                    free_memory_frame(victim_frame);
+                    load_page_into_frame(pcb, page, victim_frame);
+                } else {
+                    printf("Page fault!\n");
+                    load_page_into_frame(pcb, page, free_frame);
+                }
+
+                continue;
+            }
+
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
@@ -48,6 +88,43 @@ int scheduler_rr(int time_slice) {
 
             int page = pcb->program_counter / FRAME_SIZE;
             int frame = pcb->page_table[page];
+
+            if (frame == -1) {
+                int free_frame = find_available_frame();
+
+                if (free_frame == -1) {
+                    // choose trivial frame to evict, will implement LRU
+                    // eviction in the future
+                    int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+
+                    printf("Page fault! Victim page contents:\n\n");
+                    for (int address = victim_frame * FRAME_SIZE;
+                         address < victim_frame * FRAME_SIZE + FRAME_SIZE;
+                         address++) {
+                        char* content = mem_get_value(address);
+
+                        if (content == NULL) {
+                            char null_content[] = "NULL";
+                            content = null_content;
+                        }
+
+                        content[strcspn(content, "\n")] =
+                            '\0';  // trim newline for formatting
+                        printf("%s\n", content);
+                    }
+                    printf("\nEnd of victim page contents.\n");
+
+                    free_memory_frame(victim_frame);
+                    free_frame = victim_frame;
+                    load_page_into_frame(pcb, page, victim_frame);
+                } else {
+                    printf("Page fault!\n");
+                    load_page_into_frame(pcb, page, free_frame);
+                }
+
+                break;
+            }
+
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
@@ -79,6 +156,43 @@ int scheduler_aging() {
         // Execute next instruction
         int page = pcb->program_counter / FRAME_SIZE;
         int frame = pcb->page_table[page];
+
+        if (frame == -1) {
+            int free_frame = find_available_frame();
+
+            if (free_frame == -1) {
+                // choose trivial frame to evict, will implement LRU eviction in
+                // the future
+                int victim_frame = rand() % (FRAME_STORE_SIZE / FRAME_SIZE);
+
+                printf("Page fault! Victim page contents:\n\n");
+                for (int address = victim_frame * FRAME_SIZE;
+                     address < victim_frame * FRAME_SIZE + FRAME_SIZE;
+                     address++) {
+                    char* content = mem_get_value(address);
+
+                    if (content == NULL) {
+                        char null_content[] = "NULL";
+                        content = null_content;
+                    }
+
+                    content[strcspn(content, "\n")] =
+                        '\0';  // trim newline for formatting
+                    printf("%s\n", content);
+                }
+                printf("\nEnd of victim page contents.\n");
+
+                free_memory_frame(victim_frame);
+                free_frame = victim_frame;
+                load_page_into_frame(pcb, page, victim_frame);
+            } else {
+                printf("Page fault!\n");
+                load_page_into_frame(pcb, page, free_frame);
+            }
+
+            frame = free_frame;
+        }
+
         int offset = pcb->program_counter % FRAME_SIZE;
         int address = frame * FRAME_SIZE + offset;
 

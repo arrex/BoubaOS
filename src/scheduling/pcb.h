@@ -7,6 +7,7 @@
 typedef struct PCB {
     int pid;
     char* filename;
+    char* file_contents[MAX_FILE_SIZE];
     int file_length;
     int page_table[MAX_PAGE_TABLE_SIZE];
     int program_counter;

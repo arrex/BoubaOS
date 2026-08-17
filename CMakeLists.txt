@@ -43,10 +43,16 @@ add_executable(mysh
 )
 
 # Gather user-defined flags
+set(FRAME_SIZE "3" CACHE STRING "Size of a single frame in memory")
 set(FRAME_STORE_SIZE "600" CACHE STRING "Number of frames in the frame store")
 set(VAR_STORE_SIZE "10" CACHE STRING
   "Number of variable entries in the variable memory table")
 
 # Pass values to compilation flags
-target_compile_definitions(mysh PRIVATE
-  FRAME_STORE_SIZE=${FRAME_STORE_SIZE} VAR_STORE_SIZE=${VAR_STORE_SIZE})
+target_compile_definitions(
+  mysh
+    PRIVATE
+    FRAME_SIZE=${FRAME_SIZE}
+    FRAME_STORE_SIZE=${FRAME_STORE_SIZE}
+    VAR_STORE_SIZE=${VAR_STORE_SIZE}
+)

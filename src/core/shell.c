@@ -22,8 +22,10 @@ int main(int argc, char* argv[]) {
 
     if (is_interactive) {
         printf("Welcome to BoubaOS!\n");
-        printf("Frame Store Size = %d; Variable Store Size = %d\n",
-               FRAME_STORE_SIZE, VAR_STORE_SIZE);
+        printf(
+            "Frame Size = %d, Frame Store Size = %d; Variable Store Size = "
+            "%d\n",
+            FRAME_SIZE, FRAME_STORE_SIZE, VAR_STORE_SIZE);
         printf("►  Type help to get list of commands\n\n");
     }
 
