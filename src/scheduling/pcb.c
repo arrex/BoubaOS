@@ -1,8 +1,9 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../memory/shellmemory.h"
-#include "../scheduling/ready_queue.h"
+#include "ready_queue.h"
 
 // Start PIDs at 1
 static int next_pid = 1;
@@ -17,21 +18,24 @@ struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
 
     pcb->pid = next_pid++;
     pcb->filename = strdup(filename);
+    memcpy(pcb->file_contents, file_contents, sizeof(char*) * file_length);
     pcb->file_length = file_length;
 
-    // init page table to map file frames to memory frames
-    for (int file_frame = 0; file_frame < file_length;
-         file_frame = file_frame + FRAME_SIZE) {
-        int memory_frame = find_available_frame();
+    // init page table entries to sentinels
+    for (int page = 0; page < MAX_PAGE_TABLE_SIZE; page++) {
+        pcb->page_table[page] = -1;
+    }
 
-        for (int i = 0; i < FRAME_SIZE && file_frame + i < file_length; i++) {
-            int file_line = file_frame + i;
-            int memory_address = memory_frame * FRAME_SIZE + i;
+    // code loading: load up to first 2 pages if there is capacity
+    for (int page = 0; page < 2 && page * FRAME_SIZE < file_length; page++) {
+        int frame = find_available_frame();
 
-            mem_set_value(file_contents[file_line], memory_address);
+        if (frame == -1) {
+            break;
         }
 
-        pcb->page_table[file_frame / FRAME_SIZE] = memory_frame;
+        load_page_into_frame(pcb, page, frame);
+        pcb->page_table[page] = frame;
     }
 
     pcb->program_counter = 0;
@@ -74,13 +78,9 @@ void pcb_deinit(struct PCB* pcb) {
         // Free memory entries allocated to file contents only if there
         // are no other PCBs sharing the memory
         if (find_duplicate_script(pcb->filename) == NULL) {
-            for (int i = 0; i < MAX_PAGE_TABLE_SIZE; i++) {
-                int frame = pcb->page_table[i];
-
-                for (int offset = 0; offset < FRAME_SIZE; offset++) {
-                    int address = frame * FRAME_SIZE + offset;
-                    free_memory_entry(address);
-                }
+            for (int page = 0;
+                 page < MAX_PAGE_TABLE_SIZE && pcb->page_table[page] != -1;
+                 page++) {
             }
         }
 

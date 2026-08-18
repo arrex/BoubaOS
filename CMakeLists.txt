@@ -23,6 +23,7 @@ add_executable(mysh
     src/core/shell.c
     src/core/interpreter.c
     src/memory/shellmemory.c
+    src/memory/lru.c
     src/scheduling/pcb.c
     src/scheduling/ready_queue.c
     src/scheduling/scheduler.c
@@ -40,4 +41,19 @@ add_executable(mysh
     src/commands/quit.c
     src/commands/run.c
     src/commands/set.c
+)
+
+# Gather user-defined flags
+set(FRAME_SIZE "3" CACHE STRING "Size of a single frame in memory")
+set(FRAME_STORE_SIZE "600" CACHE STRING "Number of frames in the frame store")
+set(VAR_STORE_SIZE "10" CACHE STRING
+  "Number of variable entries in the variable memory table")
+
+# Pass values to compilation flags
+target_compile_definitions(
+  mysh
+    PRIVATE
+    FRAME_SIZE=${FRAME_SIZE}
+    FRAME_STORE_SIZE=${FRAME_STORE_SIZE}
+    VAR_STORE_SIZE=${VAR_STORE_SIZE}
 )

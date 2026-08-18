@@ -1,13 +1,14 @@
-#include "../core/shell.h"
+#include "shell.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-#include "../core/interpreter.h"
+#include "../memory/lru.h"
 #include "../memory/shellmemory.h"
 #include "../scheduling/ready_queue.h"
+#include "interpreter.h"
 
 int parseInput(char ui[]);
 
@@ -17,11 +18,18 @@ int main(int argc, char* argv[]) {
     // mode
     setvbuf(stdout, NULL, _IONBF, 0);
 
-    printf("Shell version 1.3 Created September 2024\n");
-    printf("►  Type help to get list of commands\n\n");
+    int is_interactive =
+        isatty(STDIN_FILENO);  // 1 = interactive mode, 0 = batch mode
 
-    int mode_flag =
-        isatty(STDIN_FILENO);        // 1 = interactive mode, 0 = batch mode
+    if (is_interactive) {
+        printf("Welcome to BoubaOS!\n");
+        printf(
+            "Frame Size = %d, Frame Store Size = %d; Variable Store Size = "
+            "%d\n",
+            FRAME_SIZE, FRAME_STORE_SIZE, VAR_STORE_SIZE);
+        printf("►  Type help to get list of commands\n\n");
+    }
+
     char prompt = '$';               // Shell prompt
     char userInput[MAX_USER_INPUT];  // user's input stored here
     int errorCode = 0;               // zero means no error, default
@@ -31,15 +39,14 @@ int main(int argc, char* argv[]) {
         userInput[i] = '\0';
     }
 
-    // Init shell memory
     mem_init();
-    // Init process table
     ready_queue_init();
+    lru_init();
 
     while (1) {
         // Check if we are in interactive mode... omit printing prompt char if
         // we are in batch mode
-        if (mode_flag) {
+        if (is_interactive) {
             printf("%c ", prompt);
         }
 
