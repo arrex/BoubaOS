@@ -32,11 +32,11 @@ add_executable(mysh
     src/commands/echo.c
     src/commands/exec.c
     src/commands/help.c
-    src/commands/my_cd.c
-    src/commands/my_fork.c
-    src/commands/my_ls.c
-    src/commands/my_mkdir.c
-    src/commands/my_touch.c
+    src/commands/cd.c
+    src/commands/fork.c
+    src/commands/ls.c
+    src/commands/mkdir.c
+    src/commands/touch.c
     src/commands/print.c
     src/commands/quit.c
     src/commands/run.c

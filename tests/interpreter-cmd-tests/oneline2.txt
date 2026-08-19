@@ -1,2 +1,2 @@
-set x testdir; my_mkdir $x; my_cd testdir; my_touch f; my_ls
+set x testdir; mkdir $x; cd testdir; touch f; ls
 quit

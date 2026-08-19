@@ -1,4 +1,4 @@
-#include "../commands/my_mkdir.h"
+#include "mkdir.h"
 
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -7,7 +7,7 @@
 #include "../utils/badcommand.h"
 #include "../utils/utils.h"
 
-int my_mkdir(char* dirname) {
+const int mmkdir(char* dirname) {
     // Fetch from memory if preceded by '$' sign
     if (dirname[0] == '$') {
         dirname++;

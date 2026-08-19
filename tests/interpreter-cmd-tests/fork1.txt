@@ -1,2 +1,2 @@
-my_fork cat run.txt
+fork cat run.txt
 quit

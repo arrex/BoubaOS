@@ -1,7 +1,7 @@
-my_mkdir testdir1
-my_cd testdir1
-my_mkdir $toto
+mkdir testdir1
+cd testdir1
+mkdir $toto
 set toto testdir2
-my_mkdir $toto
-my_ls
+mkdir $toto
+ls
 quit
