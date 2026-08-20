@@ -4,7 +4,7 @@
 
 #include "../utils/badcommand.h"
 
-int my_fork(char** args, int args_size) {
+int ffork(char** args, int args_size) {
     // Returns 0 in child, positive value in parent
     pid_t pid = fork();
 

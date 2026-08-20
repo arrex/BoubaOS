@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-int my_ls() {
+int ls() {
     system("ls");
     return 0;
 }

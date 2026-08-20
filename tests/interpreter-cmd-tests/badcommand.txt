@@ -1,8 +1,8 @@
 cool
 Do you like to learn about computer systems?
 run notExistFile
-my_mkdir $noExistVar
+mkdir $noExistVar
 set dirname not a good name
-my_mkdir $dirname
-my_cd noExistDir
+mkdir $dirname
+cd noExistDir
 quit
