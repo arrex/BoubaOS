@@ -1,4 +1,5 @@
 #include "variable_store.h"
+#include "memory.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -12,6 +13,10 @@ struct variable_store* vstore_init() {
     }
 
     return var_store;
+}
+
+void vstore_deinit(struct variable_store* vstore) {
+    free(vstore);
 }
 
 /*

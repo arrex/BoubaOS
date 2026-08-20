@@ -24,6 +24,7 @@ typedef struct memory_manager {
 } memory_manager;
 
 void mem_init();
+void mem_deinit();
 char* mem_get_fstore_value(int address);
 void mem_set_fstore_value(char* value_in, int address);
 char* mem_get_vstore_value(char* var_in);
