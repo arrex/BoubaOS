@@ -16,6 +16,7 @@ typedef struct frame_store {
 } frame_store;
 
 struct frame_store* fstore_init();
+void fstore_deinit(struct frame_store* fstore);
 int fstore_find_available_frame(struct frame_store* fstore);
 char* fstore_get(struct frame_store* fstore, int address);
 void fstore_set(struct frame_store* fstore, char* value_in, int address);

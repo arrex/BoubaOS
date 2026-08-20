@@ -24,6 +24,16 @@ void mem_init() {
     mem->fstore = fstore;
 }
 
+void mem_deinit() {
+    vstore_deinit(mem->vstore);
+    fstore_deinit(mem->fstore);
+
+    mem->vstore = NULL;
+    mem->fstore = NULL;
+
+    free(mem);
+}
+
 
 char* mem_get_fstore_value(int address) {
     struct frame_store* fstore = mem->fstore;

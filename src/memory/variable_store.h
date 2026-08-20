@@ -10,5 +10,6 @@ typedef struct variable_store {
 } variable_store;
 
 struct variable_store* vstore_init();
+void vstore_deinit(struct variable_store* vstore);
 char* vstore_get(struct variable_store* varmem, char* key);
 void vstore_set(struct variable_store* varmem, char* var_in, char* value_in);
