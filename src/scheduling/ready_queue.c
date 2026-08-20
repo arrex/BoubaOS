@@ -7,11 +7,6 @@
 static struct PCB* ready_queue_head = NULL;
 static int process_count = 0;
 
-void ready_queue_init() {
-    ready_queue_head = NULL;
-    process_count = 0;
-}
-
 int append_process(struct PCB* pcb) {
     process_count++;
 
