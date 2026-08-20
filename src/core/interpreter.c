@@ -76,14 +76,14 @@ int interpreter(char* command_args[], int args_size) {
         }
 
         return echo(command_args[1]);
-    } else if (strcmp(command_args[0], "my_ls") == 0) {
+    } else if (strcmp(command_args[0], "ls") == 0) {
         if (args_size > 1) {
             return badcommandTooManyTokens();
         }
 
-        return my_ls();
+        return ls();
 
-    } else if (strcmp(command_args[0], "my_mkdir") == 0) {
+    } else if (strcmp(command_args[0], "mkdir") == 0) {
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -92,9 +92,9 @@ int interpreter(char* command_args[], int args_size) {
             return badcommandTooManyTokens();
         }
 
-        return my_mkdir(command_args[1]);
+        return mmkdir(command_args[1]);
 
-    } else if (strcmp(command_args[0], "my_touch") == 0) {
+    } else if (strcmp(command_args[0], "touch") == 0) {
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -103,9 +103,9 @@ int interpreter(char* command_args[], int args_size) {
             return badcommandTooManyTokens();
         }
 
-        return my_touch(command_args[1]);
+        return touch(command_args[1]);
 
-    } else if (strcmp(command_args[0], "my_cd") == 0) {
+    } else if (strcmp(command_args[0], "cd") == 0) {
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -114,9 +114,9 @@ int interpreter(char* command_args[], int args_size) {
             return badcommandTooManyTokens();
         }
 
-        return my_cd(command_args[1]);
+        return cd(command_args[1]);
 
-    } else if (strcmp(command_args[0], "my_fork") == 0) {
+    } else if (strcmp(command_args[0], "fork") == 0) {
         if (args_size < 2) {
             return badcommandMissingArguments();
         }
@@ -126,7 +126,7 @@ int interpreter(char* command_args[], int args_size) {
         }
 
         // Skip "exec" and pass in remaining arguments only
-        return my_fork(command_args + 1, args_size - 1);
+        return ffork(command_args + 1, args_size - 1);
 
     } else if (strcmp(command_args[0], "exec") == 0) {
         if (args_size < 3) {
