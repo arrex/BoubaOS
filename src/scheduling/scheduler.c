@@ -4,7 +4,7 @@
 
 #include "../core/shell.h"
 #include "../memory/lru.h"
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 #include "ready_queue.h"
 
 // First-come, first-server policy
@@ -20,7 +20,7 @@ int scheduler_fcfs() {
             int frame = pcb->page_table[page];
 
             if (frame == -1) {
-                int free_frame = find_available_frame();
+                int free_frame = mem_find_available_frame();
 
                 if (free_frame == -1) {
                     // choose trivial frame to evict, will implement LRU
@@ -31,7 +31,7 @@ int scheduler_fcfs() {
                     for (int address = victim_frame * FRAME_SIZE;
                          address < victim_frame * FRAME_SIZE + FRAME_SIZE;
                          address++) {
-                        char* content = mem_get_value(address);
+                        char* content = mem_get_fstore_value(address);
 
                         if (content == NULL) {
                             char null_content[] = "NULL";
@@ -44,11 +44,11 @@ int scheduler_fcfs() {
                     }
                     printf("\nEnd of victim page contents.\n");
 
-                    free_memory_frame(victim_frame);
-                    load_page_into_frame(pcb, page, victim_frame);
+                    mem_free_memory_frame(victim_frame);
+                    mem_load_page_into_frame(pcb, page, victim_frame);
                 } else {
                     printf("Page fault!\n");
-                    load_page_into_frame(pcb, page, free_frame);
+                    mem_load_page_into_frame(pcb, page, free_frame);
                 }
 
                 continue;
@@ -58,7 +58,7 @@ int scheduler_fcfs() {
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
-            errCode = parseInput(mem_get_value(address));
+            errCode = parseInput(mem_get_fstore_value(address));
             pcb->program_counter++;
         }
 
@@ -92,7 +92,7 @@ int scheduler_rr(int time_slice) {
             int frame = pcb->page_table[page];
 
             if (frame == -1) {
-                int free_frame = find_available_frame();
+                int free_frame = mem_find_available_frame();
 
                 if (free_frame == -1) {
                     int victim_frame = get_lru_frame();
@@ -101,7 +101,7 @@ int scheduler_rr(int time_slice) {
                     for (int address = victim_frame * FRAME_SIZE;
                          address < victim_frame * FRAME_SIZE + FRAME_SIZE;
                          address++) {
-                        char* content = mem_get_value(address);
+                        char* content = mem_get_fstore_value(address);
 
                         if (content == NULL) {
                             char null_content[] = "NULL";
@@ -114,12 +114,12 @@ int scheduler_rr(int time_slice) {
                     }
                     printf("\nEnd of victim page contents.\n");
 
-                    free_memory_frame(victim_frame);
+                    mem_free_memory_frame(victim_frame);
                     free_frame = victim_frame;
-                    load_page_into_frame(pcb, page, victim_frame);
+                    mem_load_page_into_frame(pcb, page, victim_frame);
                 } else {
                     printf("Page fault!\n");
-                    load_page_into_frame(pcb, page, free_frame);
+                    mem_load_page_into_frame(pcb, page, free_frame);
                 }
 
                 break;
@@ -129,7 +129,7 @@ int scheduler_rr(int time_slice) {
             int offset = pcb->program_counter % FRAME_SIZE;
             int address = frame * FRAME_SIZE + offset;
 
-            errCode = parseInput(mem_get_value(address));
+            errCode = parseInput(mem_get_fstore_value(address));
             pcb->program_counter++;
         }
 
@@ -159,7 +159,7 @@ int scheduler_aging() {
         int frame = pcb->page_table[page];
 
         if (frame == -1) {
-            int free_frame = find_available_frame();
+            int free_frame = mem_find_available_frame();
 
             if (free_frame == -1) {
                 // choose trivial frame to evict, will implement LRU eviction in
@@ -170,7 +170,7 @@ int scheduler_aging() {
                 for (int address = victim_frame * FRAME_SIZE;
                      address < victim_frame * FRAME_SIZE + FRAME_SIZE;
                      address++) {
-                    char* content = mem_get_value(address);
+                    char* content = mem_get_fstore_value(address);
 
                     if (content == NULL) {
                         char null_content[] = "NULL";
@@ -183,12 +183,12 @@ int scheduler_aging() {
                 }
                 printf("\nEnd of victim page contents.\n");
 
-                free_memory_frame(victim_frame);
+                mem_free_memory_frame(victim_frame);
                 free_frame = victim_frame;
-                load_page_into_frame(pcb, page, victim_frame);
+                mem_load_page_into_frame(pcb, page, victim_frame);
             } else {
                 printf("Page fault!\n");
-                load_page_into_frame(pcb, page, free_frame);
+                mem_load_page_into_frame(pcb, page, free_frame);
             }
 
             frame = free_frame;
@@ -198,7 +198,7 @@ int scheduler_aging() {
         int offset = pcb->program_counter % FRAME_SIZE;
         int address = frame * FRAME_SIZE + offset;
 
-        errCode = parseInput(mem_get_value(address));
+        errCode = parseInput(mem_get_fstore_value(address));
         pcb->program_counter++;
 
         // Check if process is complete
