@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 
-#include "shellmemory.h"
+#include "memory.h"
 
 // get least recently used frame number
 // add to lru list

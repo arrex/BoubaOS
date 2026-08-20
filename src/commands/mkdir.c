@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 #include "../utils/badcommand.h"
 #include "../utils/utils.h"
 
@@ -11,7 +11,7 @@ const int mmkdir(char* dirname) {
     // Fetch from memory if preceded by '$' sign
     if (dirname[0] == '$') {
         dirname++;
-        dirname = get_var_value(dirname);
+        dirname = mem_get_vstore_value(dirname);
 
         if (dirname == NULL) {
             return badcommandVariableDoesNotExist();

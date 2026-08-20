@@ -1,10 +1,10 @@
 #include <stdio.h>
 
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 #include "../utils/badcommand.h"
 
 int print(char* var) {
-    char* memory_value = get_var_value(var);
+    char* memory_value = mem_get_vstore_value(var);
 
     if (memory_value == NULL) {
         return badcommandVariableDoesNotExist();
