@@ -19,7 +19,7 @@ include_directories(
 )
 
 # Create executable
-add_executable(mysh
+add_executable(picoshell
     src/core/shell.c
     src/core/interpreter.c
     src/memory/memory.c
@@ -53,7 +53,7 @@ set(VAR_STORE_SIZE "10" CACHE STRING
 
 # Pass values to compilation flags
 target_compile_definitions(
-  mysh
+  picoshell
     PRIVATE
     FRAME_SIZE=${FRAME_SIZE}
     FRAME_STORE_SIZE=${FRAME_STORE_SIZE}
