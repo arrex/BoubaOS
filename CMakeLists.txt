@@ -47,7 +47,7 @@ add_executable(picoshell
 
 # Gather user-defined flags
 set(FRAME_SIZE "3" CACHE STRING "Size of a single frame in memory")
-set(FRAME_STORE_SIZE "600" CACHE STRING "Number of frames in the frame store")
+set(FRAME_STORE_SIZE "300" CACHE STRING "Number of frames in the frame store")
 set(VAR_STORE_SIZE "10" CACHE STRING
   "Number of variable entries in the variable memory table")
 
