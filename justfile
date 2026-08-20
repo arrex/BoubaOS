@@ -5,7 +5,7 @@ clean:
     rm -f *.log
     rm -rf build
 
-build FRAME_SIZE="3" FRAME_STORE_SIZE="600" VAR_STORE_SIZE="10":
+build FRAME_SIZE="3" FRAME_STORE_SIZE="300" VAR_STORE_SIZE="10":
     just clean
     mkdir -p build
     cmake -B build \
@@ -19,7 +19,7 @@ build FRAME_SIZE="3" FRAME_STORE_SIZE="600" VAR_STORE_SIZE="10":
 test:
     ./run_tests.sh
 
-run FRAME_SIZE="3" FRAME_STORE_SIZE="600" VAR_STORE_SIZE="10":
+run FRAME_SIZE="3" FRAME_STORE_SIZE="300" VAR_STORE_SIZE="10":
     just clean
     just test
     just build {{FRAME_SIZE}} {{FRAME_STORE_SIZE}} {{VAR_STORE_SIZE}}
