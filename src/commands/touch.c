@@ -3,7 +3,7 @@
 #include "../utils/badcommand.h"
 #include "../utils/utils.h"
 
-int my_touch(char* filename) {
+int touch(char* filename) {
     if (is_valid_name(filename) != 1) {
         return badcommandNameNotAlphanum();
     }

@@ -1,6 +1,6 @@
-my_mkdir testdir
-my_cd testdir
-my_touch testfile1
-my_touch testfile2
-my_ls
+mkdir testdir
+cd testdir
+touch testfile1
+touch testfile2
+ls
 quit
