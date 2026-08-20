@@ -10,17 +10,15 @@
 #include "../scheduling/ready_queue.h"
 #include "interpreter.h"
 
-int parseInput(char ui[]);
-
-// Start of everything
 int main(int argc, char* argv[]) {
     // Set stdout to unbuffered to avoid undefined printing behaviour in batch
     // mode
     setvbuf(stdout, NULL, _IONBF, 0);
 
-    int is_interactive =
-        isatty(STDIN_FILENO);  // 1 = interactive mode, 0 = batch mode
+    // 1 = interactive mode, 0 = batch mode
+    int is_interactive = isatty(STDIN_FILENO);
 
+    // omit printing welcome banner if we are in barch mode
     if (is_interactive) {
         printf("Welcome to pico-shell!\n");
         printf(
@@ -40,11 +38,9 @@ int main(int argc, char* argv[]) {
     }
 
     mem_init();
-    ready_queue_init();
 
     while (1) {
-        // Check if we are in interactive mode... omit printing prompt char if
-        // we are in batch mode
+        // omit printing prompt char if we are in batch mode
         if (is_interactive) {
             printf("%c ", prompt);
         }
