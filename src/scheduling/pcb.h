@@ -1,5 +1,5 @@
 #include "../core/interpreter.h"
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 
 // round up
 #define MAX_PAGE_TABLE_SIZE (MAX_FILE_SIZE + FRAME_SIZE - 1) / FRAME_SIZE

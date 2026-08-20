@@ -1,6 +1,6 @@
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 
 int set(char* var, char* value) {
-    set_var_value(var, value);
+    mem_set_vstore_value(var, value);
     return 0;
 }
