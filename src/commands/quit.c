@@ -5,6 +5,8 @@
 
 int quit() {
     printf("Bye!\n");
+
     mem_deinit();
+
     exit(0);
 }
