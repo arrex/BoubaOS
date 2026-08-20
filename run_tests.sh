@@ -72,7 +72,7 @@ run_test() {
         return
     fi
 
-    ./mysh < "$test_file" > temp_output.txt
+    ./picoshell < "$test_file" > temp_output.txt
     local exit_code=$?
 
     if [ "$exit_code" -ne 0 ]; then
@@ -116,7 +116,7 @@ echo "----------------------" >> "$LOG_FILE"
 build_project 100 1000 10 || exit 1
 
 cd "$TEST_DIR/interpreter-cmd-tests" || exit 1
-cp "$BUILD_DIR/mysh" .
+cp "$BUILD_DIR/picoshell" .
 
 for test_file in *.txt; do
     [[ "$test_file" == *_result.txt ]] && continue
@@ -125,7 +125,7 @@ for test_file in *.txt; do
     run_test "$test_file" "${base_name}_result.txt"
 done
 
-rm -f mysh temp_output.txt
+rm -f picoshell temp_output.txt
 
 echo "" >> "$LOG_FILE"
 echo "=============================" >> "$LOG_FILE"
@@ -141,7 +141,7 @@ echo "----------------------" >> "$LOG_FILE"
 build_project 100 1000 10 || exit 1
 
 cd "$TEST_DIR/scheduler-tests" || exit 1
-cp "$BUILD_DIR/mysh" .
+cp "$BUILD_DIR/picoshell" .
 
 for test_file in *.txt; do
     [[ "$test_file" == *_result.txt ]] && continue
@@ -150,7 +150,7 @@ for test_file in *.txt; do
     run_test "$test_file" "${base_name}_result.txt"
 done
 
-rm -f mysh temp_output.txt
+rm -f picoshell temp_output.txt
 
 echo "" >> "$LOG_FILE"
 echo "=============================" >> "$LOG_FILE"
@@ -191,11 +191,11 @@ for test_file in *.txt; do
     # build_project changes cwd to SCRIPT_DIR
     cd "$DEMAND_PAGING_DIR" || exit 1
 
-    cp "$BUILD_DIR/mysh" .
+    cp "$BUILD_DIR/picoshell" .
 
     run_test "$test_file" "$result_file"
 
-    rm -f mysh
+    rm -f picoshell
 done
 
 # ===========================================================================
