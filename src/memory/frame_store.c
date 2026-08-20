@@ -24,6 +24,12 @@ struct frame_store* fstore_init() {
     return frame_store;
 }
 
+void fstore_deinit(struct frame_store* fstore) {
+    // deinit in reverse order of init
+    free(fstore);
+    lru_deinit();
+}
+
 /*
  * This function searches for a free frame in shell memory.
  * Returns frame number if free frame is found, -1 otherwise.
