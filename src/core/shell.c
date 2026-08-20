@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
         isatty(STDIN_FILENO);  // 1 = interactive mode, 0 = batch mode
 
     if (is_interactive) {
-        printf("Welcome to BoubaOS!\n");
+        printf("Welcome to pico-shell!\n");
         printf(
             "Frame Size = %d, Frame Store Size = %d; Variable Store Size = "
             "%d\n",
