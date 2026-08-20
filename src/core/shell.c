@@ -63,6 +63,8 @@ int main(int argc, char* argv[]) {
         memset(userInput, 0, sizeof(userInput));
     }
 
+    mem_deinit();
+
     return 0;
 }
 

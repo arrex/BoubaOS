@@ -41,7 +41,19 @@ void lru_init() {
     tail->prev = prev;
 }
 
-void lru_deinit() {}
+void lru_deinit() {
+    struct LRUNode* prev = NULL;
+    struct LRUNode* node = head;
+
+    while (node != NULL) {
+        free(prev);
+        prev = node;
+        node = node->next;
+    }
+
+    // prev will be pointing to tail at this point
+    free(prev);
+}
 
 /*
  * Returns least recently used frame number
