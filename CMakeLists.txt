@@ -22,7 +22,9 @@ include_directories(
 add_executable(mysh
     src/core/shell.c
     src/core/interpreter.c
-    src/memory/shellmemory.c
+    src/memory/memory.c
+    src/memory/frame_store.c
+    src/memory/variable_store.c
     src/memory/lru.c
     src/scheduling/pcb.c
     src/scheduling/ready_queue.c

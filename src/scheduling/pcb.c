@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../memory/shellmemory.h"
+#include "../memory/memory.h"
 #include "ready_queue.h"
 
 // Start PIDs at 1
@@ -28,13 +28,13 @@ struct PCB* pcb_init(char* filename, char* file_contents[], int file_length) {
 
     // code loading: load up to first 2 pages if there is capacity
     for (int page = 0; page < 2 && page * FRAME_SIZE < file_length; page++) {
-        int frame = find_available_frame();
+        int frame = mem_find_available_frame();
 
         if (frame == -1) {
             break;
         }
 
-        load_page_into_frame(pcb, page, frame);
+        mem_load_page_into_frame(pcb, page, frame);
         pcb->page_table[page] = frame;
     }
 
